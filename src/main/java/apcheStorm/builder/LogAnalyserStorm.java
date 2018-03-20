@@ -37,22 +37,22 @@ public class LogAnalyserStorm {
 
 		//Stop the topology
 		//
-		Utils.sleep(1000);
+//		Utils.sleep(1000);
 
-		// kill the topology
-		final KillOptions killOptions = new KillOptions();
-		killOptions.set_wait_secs(0);
-		cluster.killTopologyWithOpts("LogAnalyserStorm", killOptions);
-
-		// wait until the topology is removed from the cluster
-		while (topologyExists("LogAnalyserStorm",cluster)) {
-			// avoid cpu overuse
-			Utils.sleep(1000);
-		}
-
-		// for some reason I have to wait to be sure topology is stopped and local cluster can be shutdown
-		Utils.sleep(5000);
-		cluster.shutdown();
+//		// kill the topology
+//		final KillOptions killOptions = new KillOptions();
+//		killOptions.set_wait_secs(0);
+//		cluster.killTopologyWithOpts("LogAnalyserStorm", killOptions);
+//
+//		// wait until the topology is removed from the cluster
+//		while (topologyExists("LogAnalyserStorm",cluster)) {
+//			// avoid cpu overuse
+//			Utils.sleep(1000);
+//		}
+//
+//		// for some reason I have to wait to be sure topology is stopped and local cluster can be shutdown
+//		Utils.sleep(5000);
+//		cluster.shutdown();
 	}
 
 	private final static boolean topologyExists(final String topologyName, LocalCluster cluster) {
