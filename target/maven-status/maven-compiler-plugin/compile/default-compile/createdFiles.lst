@@ -1,3 +1,6 @@
-kafka/consumers/Consumer1.class
+apacheStorm/Bolts/CallLogCreatorBolt.class
 kafka/producers/Producer1.class
-apacheStorm/spouts/ProjectSpout.class
+apacheStorm/spouts/FakeCallLogReaderSpout.class
+apacheStorm/Bolts/CallLogCounterBolt.class
+apacheStorm/builder/LogAnalyserStorm.class
+kafka/consumers/Consumer1.class

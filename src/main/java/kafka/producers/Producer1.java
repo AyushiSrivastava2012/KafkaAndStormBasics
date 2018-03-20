@@ -4,15 +4,12 @@ package kafka.producers;
 //import util.properties packages
 import java.util.Properties;
 
-//import simple producer packages
-import org.apache.kafka.clients.producer.Producer;
-
 //import KafkaProducer packages
 import org.apache.kafka.clients.producer.KafkaProducer;
+//import simple producer packages
+import org.apache.kafka.clients.producer.Producer;
 //import ProducerRecord packages
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.IntegerSerializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 
 public class Producer1 {
 

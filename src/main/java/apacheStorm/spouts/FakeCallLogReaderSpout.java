@@ -1,8 +1,6 @@
 package apacheStorm.spouts;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -38,25 +36,6 @@ public class FakeCallLogReaderSpout implements IRichSpout {
 	@Override
 	public void nextTuple() {
 		if(this.idx <= 1000) {
-			//			List<String> mobileNumbers = new ArrayList<String>();
-			//			mobileNumbers.add("1234123401");
-			//			mobileNumbers.add("1234123402");
-			//			mobileNumbers.add("1234123403");
-			//			mobileNumbers.add("1234123404");
-			//
-			//			Integer localIdx = 0;
-			//			while(localIdx++ < 100 && this.idx++ < 1000) {
-			//				String fromMobileNumber = mobileNumbers.get(randomGenerator.nextInt(4));
-			//				String toMobileNumber = mobileNumbers.get(randomGenerator.nextInt(4));
-			//
-			//				while(fromMobileNumber == toMobileNumber) {
-			//					toMobileNumber = mobileNumbers.get(randomGenerator.nextInt(4));
-			//				}
-			//
-			//				Integer duration = randomGenerator.nextInt(60);
-			//				this.collector.emit(new Values(fromMobileNumber, toMobileNumber, duration));
-			//			}
-
 			//Kafka consumer configuration settings
 			String topicName = "Hello-Kafka";//args[0].toString();
 			Properties props = new Properties();
@@ -87,9 +66,6 @@ public class FakeCallLogReaderSpout implements IRichSpout {
 					// print the offset,key and value for the consumer records.
 					this.collector.emit(new Values(record.value()));
 				}
-
-				
-
 			}
 		}
 	}
