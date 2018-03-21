@@ -1,5 +1,7 @@
 package apacheStorm.Bolts;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -45,27 +47,57 @@ public class CallLogCreatorBolt implements IRichBolt {
 
 		if(from != null) {
 			Properties prop = new Properties();
-			String propFileName = "config.properties";
+			String propFileName = "/Users/B0096708/Desktop/config.properties";
+			//URL[] classLoaderUrl = new URL[]{new URL(propFileName)};
+			//ClassLoader classLoader = new URLClassLoader(classLoaderUrl);
+			//			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			//InputStream inputStream = classLoader.getResourceAsStream(propFileName);
+			InputStream inputStream = null;
+			try {
+				File pluginsDir = new File(propFileName);
+				inputStream = new FileInputStream(pluginsDir);
+				prop.load(inputStream);
 
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			InputStream inputStream = classLoader.getResourceAsStream(propFileName);
+				String classPathForTestJava= prop.getProperty("jarPath");
+				String methodName=prop.getProperty("methodName");
+				System.out.println("classpath********"+classPathForTestJava+" methodName ***"+methodName);
 
-			if (inputStream != null) {
+				pluginsDir = new File(classPathForTestJava);
 				try {
-					prop.load(inputStream);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					String[] listOfFiles = classPathForTestJava.split(";");
+					for(String fileName: listOfFiles) {
+						if(fileName.compareTo(from) ==0 ) {
+							// Get the jar URL which contains target class
+							String JAR_URL = "jar:file:/Users/B0096708/Desktop/"+from+".jar!/";
+							URL FileSysUrl = new URL(JAR_URL);
+							JarURLConnection jarURLConnection = (JarURLConnection)FileSysUrl.openConnection();
+							JarFile jarFile = jarURLConnection.getJarFile();
+
+							URL[] classLoaderUrls = new URL[]{new URL("file:/Users/B0096708/Desktop/"+from+".jar")};
+							urlClassLoader = new URLClassLoader(classLoaderUrls);
+							Manifest manifest = jarFile.getManifest();
+
+							Class<?> beanClass = urlClassLoader.loadClass(from);
+
+							Method method = beanClass.getMethod("hello");
+
+							String[] params = null;
+							Constructor<?> constructor = beanClass.getConstructor();
+							method.invoke(constructor.newInstance());
+
+						}	
+					}
+				}catch(Exception e) {
 					e.printStackTrace();
 				}
-			} else {
-				System.out.println("file not found.");
-			}
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 
-			String classPathForTestJava= prop.getProperty("jarPath");
-			String methodName=prop.getProperty("methodName");
-			System.out.println("classpath********"+classPathForTestJava+" methodName ***"+methodName);
-
-			File pluginsDir = new File(classPathForTestJava);
 
 			//			try {
 			//				String[] listOfFiles = classPathForTestJava.split(";");
@@ -83,34 +115,8 @@ public class CallLogCreatorBolt implements IRichBolt {
 			//				e.printStackTrace();
 			//			}
 
-			
-			try {
-				String[] listOfFiles = classPathForTestJava.split(";");
-				for(String fileName: listOfFiles) {
-					if(fileName.compareTo(from) ==0 ) {
-						// Get the jar URL which contains target class
-						String JAR_URL = "jar:file:/Users/B0096708/Desktop/"+from+".jar!/";
-						URL FileSysUrl = new URL(JAR_URL);
-						JarURLConnection jarURLConnection = (JarURLConnection)FileSysUrl.openConnection();
-						JarFile jarFile = jarURLConnection.getJarFile();
 
-						URL[] classLoaderUrls = new URL[]{new URL("file:/Users/B0096708/Desktop/"+from+".jar")};
-						urlClassLoader = new URLClassLoader(classLoaderUrls);
-						Manifest manifest = jarFile.getManifest();
 
-						Class<?> beanClass = urlClassLoader.loadClass(from);
-
-						Method method = beanClass.getMethod("hello");
-
-						String[] params = null;
-						Constructor<?> constructor = beanClass.getConstructor();
-						method.invoke(constructor.newInstance());
-
-					}	
-				}
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
 		}
 		//collector.emit(new Values(from));
 		collector.ack(tuple);
