@@ -1,15 +1,5 @@
 package apacheStorm.builder;
 
-import java.io.FileNotFoundException;
-import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.List;
-import java.util.Properties;
-
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.topology.TopologyBuilder;
@@ -21,9 +11,6 @@ import apacheStorm.spouts.FakeCallLogReaderSpout;
 public class LogAnalyserStorm {
 	public static void main(String[] args) throws Exception{
 		//read property file
-		
-
-
 		//
 		//		Class loadedMyClass = classLoader.loadClass(classPathForTestJava);
 		//		Constructor constructor = loadedMyClass.getConstructor();
@@ -34,15 +21,15 @@ public class LogAnalyserStorm {
 
 
 		//Create Config instance for cluster configuration
-			Config config = new Config();
+		Config config = new Config();
 		config.setDebug(true);
-
+		//config.put(Config.NIMBUS_HOST, "localhost");
 		TopologyBuilder builder = new TopologyBuilder();
 		builder.setSpout("call-log-reader-spout", new FakeCallLogReaderSpout());
 
 		builder.setBolt("call-log-creator-bolt", new CallLogCreatorBolt(),10)
 		.shuffleGrouping("call-log-reader-spout");
-		 
+
 		//		builder.setBolt("call-log-counter-bolt", new CallLogCounterBolt(),2)
 		//		.fieldsGrouping("call-log-creator-bolt", new Fields("call"));
 
